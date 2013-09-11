@@ -1,7 +1,7 @@
 TagCheckScore
 =============
 
-Crowdsourcing application for tagging images
+Crowdsourcing application for tagging images.  
 A running Version of this Project you can find at http://cityapps.fokus.fraunhofer.de/tcs/
 
 Install
@@ -20,4 +20,6 @@ pip install django-csvimport
 pip install git+git://github.com/gkuhn1/django-admin-multiupload.git
 ```
 
+Additional
+----------
 For demonstration purposes a sqlite database is included. In production you should use PostgreSQL or similar.
