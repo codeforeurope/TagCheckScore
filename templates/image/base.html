@@ -1,0 +1,411 @@
+<!-- 
+Tag. Check. Score. is a program to crowdsource metadata for picture files.  
+Copyright (C) 2013  Fraunhofer Institute of Open Communication Systems (FOKUS)
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see [http://www.gnu.org/licenses/].
+
+Contact: info [at] fokus [dot] fraunhofer [dot] de	
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+  	{% load i18n %}
+  	{% load staticfiles %}
+    <title>Tag.Check.Score.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jPages.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/prettyPhoto.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" charset="utf-8" />
+		<script src="{{ STATIC_URL }}js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
+		<script src="{{ STATIC_URL }}js/jPages.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery-ui-1.9.2.custom.css">
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/jquery.tagit.css">
+    <script src="{{ STATIC_URL }}js/jquery-ui-1.9.2.custom.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ STATIC_URL }}js/tag-it.js" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ STATIC_URL }}js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+	<link type="text/css" rel="stylesheet" href="{{ STATIC_URL }}css/tagit.ui-zendesk.css">
+	<script type="text/javascript" src="{{ STATIC_URL }}js/apprise-1.5.full.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}css/apprise.css" type="text/css" />
+		<script>
+    $(document).ready(function()
+	{
+
+		if (! $.cookie("WarningMessageLoad")){
+		   $('#myModal-warning').modal('show');
+		    var date = new Date();
+			 var minutes = 10;
+			 date.setTime(date.getTime() + (minutes * 60 * 1000));
+		   $.cookie("WarningMessageLoad", "firstSet", {"expires" : date})
+		}
+
+		      	$('.scoreSubmit').click(function(){
+		      		
+		      		var name = $.trim($('#name').val());
+		      		if (name  === '') {
+        alert('{% trans "Please add a name." %}');
+        return false;
+    } else {
+		      		
+		var form = $('#scoreForm')
+		var url = form.attr("action");
+		$.ajax({
+		url: '{{ WEB_PREFIX }}/?button=' + $(this).attr("id"),
+		type: "POST",
+		data: form.serialize(),
+		success: function(data){
+		$('#replace_me').html(data);
+		$('#myModal-save-score').modal('hide')
+		$('#myModal-top-list').modal('show')
+		}
+		});
+		return false;
+		}
+	});
+	
+	$('#replace_search').on("click", '.searchSubmit', function(){
+		var form = $('#searchForm')
+		var url = form.attr("action");
+		$.ajax({
+		url: '{{ WEB_PREFIX }}/?button=' + $(this).attr("id"),
+		type: "POST",
+		data: form.serialize(),
+		success: function(data){
+		$('#replace_search').html(data);
+		}
+		});
+		return false;
+	});
+	
+	$(this).ajaxStart(function()
+       {
+          $.blockUI({ overlayCSS: { backgroundColor: '#fff' }, message: null }); 
+       });
+       
+       $(this).ajaxStop(function()
+       {
+          $.unblockUI();
+    });
+		
+	});
+    </script>
+    <script type="text/javascript">
+    
+    function setLang(lang){
+        $('#langForm select').val(lang); 
+        $('#langForm').submit();
+        return false;
+    }
+</script>
+  </head>
+  <body>
+  <div class="modal fade" id="myModal-warning">
+  	<div id="highscorelist">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+			<a href="#" class="close" data-dismiss="modal">&times;</a>
+        	<div><h3>{% trans "Please note before using" %}</h3></div>
+        </div>
+        <div class="modal-body" id="modal" style="">
+
+<p>{% trans "This application was technically realized by a Code for Europe Fellow and Fraunhofer FOKUS in the context of the European project Commons for Europe. The Ethnological Museum uses this application to make hundreds of pictures available to the public and to crowdsource meta information." %}</p> 
+<p>{% trans "The picture files used in this application have hardly been reviewed, so their content is uncertain." %}</p><br>
+<p><b>{% trans "The Ethnological Museum Berlin therefore asks for the attention to the following information:" %}</b></p><br>
+<ul>
+  <li>{% trans "The pictures are from the time of colonialism in Africa." %}</li>
+  <li>{% trans "The material may contain images that are not suitable for persons under 18." %}</li>
+  <li>{% trans "Some of the historical photographs and images may be perceived as problematic from today’s perspective. We therefore kindly ask for the sensitive and respectful handling of this material." %}</li>
+</ul>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+  <div class="modal fade" id="myModal-save-score">
+  	<div id="savescore">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+			<a href="#" class="close" data-dismiss="modal">&times;</a>
+        	<div><h3>{% trans "Congrats!" %}</h3></div>
+        	<h5>{% trans "You've reached the Top 10. After submitting, your score will be set back to 0." %}</h5>
+        </div>
+        <div class="modal-body" id="modal" style=" text-align:center">
+        	<form action="#" method="post" id="scoreForm">{% csrf_token %}
+          	<input type="text" id="name" name="name" placeholder="{% trans "your name" %}" class="cform-text" size="40">
+          	<button class="btn btn-score btn-custom scoreSubmit" type="submit" value="Add Score" name="AddScore" id="AddScore">{% trans "Take me into the Top 10!" %}</button>
+        	</form>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+  	
+  <div class="modal fade" id="myModal-not-score">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+			<a href="#" class="close" data-dismiss="modal">&times;</a>
+        	<div><h3>{% trans "Almost, but not yet..." %}</h3></div>
+        </div>
+        <div class="modal-body" id="modal" style=" text-align:center">
+        <h5>{% trans "Sorry, you don't have enough points yet to enter the highscore. But, hey, please continue tagging to earn more points and help us! We appreciate it!" %}</h5>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <nav class="navbar-wrapper">
+      <div class="container navbar-fixed" style="background-color: white">
+          <div class="navbar navbar-fixed-top navbar-inverse">
+          <div class="container">
+          <div>
+            <a class="navbar-brand" href="#"><img src="{{ STATIC_URL }}img/logo_beta.png" class="img-responsive" alt="Logo"></a>
+          </div>  
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <div class="nav-collapse collapse" id="menu">
+              <ul class="nav navbar-nav pull-right">
+                <li id="scroll-content-search" class="active"><a href="#div_table">{% trans "Home" %}</a></li>
+                <li id="scroll-content-tag"><a href="#content-tag">{% trans "Tag a picture" %}</a></li>
+                <li id="scroll-content-search"><a href="#search">{% trans "Search" %}</a></li>
+                <a class="flag" onclick="setLang('de');"><img src="{{ STATIC_URL }}img/de_DE.png" width="16" height="11"></a>
+<a class="flag" onclick="setLang('en');"><img src="{{ STATIC_URL }}img/en_UK.png" width="16" height="11"></a>
+<form id="langForm" action="{{ WEB_PREFIX }}/i18n/setlang/" method="post" style="display:none;">
+	{% csrf_token %}
+    <select name="language">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+    </select>
+</form>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <header id="div_table" class="content"> 
+    	<div id="div_tablecell"> 
+        	<div id="mainbox" >
+                <div id="carousel-example-generic" class="carousel slide">
+              <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+              </ol>
+              <div class="carousel-inner"  id="carousel-inner">
+                <div class="item active">
+                	<div class="container">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3" style="text-align:center">
+                            <img src="{{ STATIC_URL }}img/Foto 1_bearb2.jpg"  class="img-slide-responsive slideshow-img " height="300px" width="300px">
+                        </div>
+                        <div id="slide-titel" class="col-lg-5" style="text-align:center">
+                            <h2>{% trans "We've got lots of pictures!" %}</h2>
+                            <p>{% trans "Help us tag pictures to make them searchable and thus available for everybody." %}</p>
+                        </div>
+                        <div class=" col-lg-5" style="text-align:center" id="scroll-content-tag">
+                            <a role="button"  href="#content-tag" class="content btn btn-score btn-custom btn-block">{% trans "Let's get started" %}</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+               <div class="item ">
+                	<div class="container">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3" style="text-align:center">
+                            <img src="{{ STATIC_URL }}img/Foto 2_bearb2.jpg"  class=" img-slide-responsive slideshow-img " height="300px" width="300px">
+                        </div>
+                        <div id="slide-titel" class="col-lg-5" style="text-align:center">
+                            <h2>{% trans "How it works?" %}</h2>
+                            <p>{% trans "What you see is what you tag. You see a person, a tent, the sun? Let us know!" %}</p>
+                        </div>
+                        <div class=" col-lg-5" style="text-align:center" id="scroll-content-tag">
+                            <a role="button"  href="#content-tag" class="content btn btn-score btn-custom btn-block">{% trans "Let's get started" %}</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="item">
+                	<div class="container">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3" style="text-align:center">
+                            <img src="{{ STATIC_URL }}img/Foto 3_bearb2.jpg"  class=" img-slide-responsive slideshow-img " height="300px" width="300px">
+                        </div>
+                        <div id="slide-titel" class="col-lg-5" style="text-align:center">
+                            <h2>{% trans "Check for mistakes!" %}</h2>
+                            <p>{% trans "Does the tag really describe what can be seen on the picture? Help us to find possible mistakes." %}</p>
+                        </div>
+                        <div class=" col-lg-5" style="text-align:center" id="scroll-content-tag">
+                            <a role="button"  href="#content-tag" class="content btn btn-score btn-custom btn-block">{% trans "Let's get started" %}</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <div class="item">
+                	<div class="container">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-3" style="text-align:center">
+                            <img src="{{ STATIC_URL }}img/Foto 4_bearb2.jpg"  class="img-slide-responsive  slideshow-img" height="300px" width="300px">
+                        </div>
+                        <div id="slide-titel" class="col-lg-5" style="text-align:center">
+                            <h2>{% trans "Score to become our Top-Tagger!" %}</h2>
+                            <p>{% trans "The more you tag, the more points you score. A high number will get you a place in our highscore." %}</p>
+                        </div>
+                        <div class=" col-lg-5" style="text-align:center" id="scroll-content-tag">
+                            <a role="button"  href="#content-tag" class="content btn btn-score btn-custom btn-block">{% trans "Let's get started" %}</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+              </div>
+              <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </div>
+            <div class="container">
+                <div class="row ">
+                    <div class="col-lg-12" style="text-align:center; margin-top:140px; min-height:220px" id="scroll-content-tag">
+                    	<a  href="#content-tag" class="content">
+                        <img src="{{ STATIC_URL }}img/down-arrow.png" id="divOne" style="margin-bottom:10px;">
+                        </a>
+                        <div id="divTwo" style="display: none;"><h3 style="color: #6a6a6a;">{% trans "Let's get started" %}</h3></div>
+                    </div>
+                </div>
+            </div>
+       </div>     
+	</div>                   
+</header>
+<div id="replace_me">
+    {% block mytext %}
+dynamic content
+    {% endblock %}
+</div>
+<div id="replace_search">
+    {% block mysearch %}
+dynamic content
+    {% endblock %}
+</div>
+<footer id="footer">
+    <div class="container">
+            <div class="row">
+            	 <hr>
+            	 <div class="col-3 col-sm-3 col-lg-3" style="text-align:center"><img src="{{ STATIC_URL }}img/fraunhofer_logo.png" alt="fraunhofer" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-2 col-lg-2" style="text-align:center"><img src="{{ STATIC_URL }}img/cip_Logo.png" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-3 col-lg-2" style="text-align:center"><img src="{{ STATIC_URL }}img/commons4u_logo.png" alt="commons4u" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-2 col-lg-2" style="text-align:center; margin-bottom:20px;"><img src="{{ STATIC_URL }}img/code4eu_logo.png" alt="code4eu" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-3 col-sm-2 col-lg-3" style="text-align:center"><img src="{{ STATIC_URL }}img/eu_logo.png" alt="eu_logo" style="cursor: default" class="img-responsive"> </div>
+                 <div class="col-12 col-sm-12 col-lg-12 muted">
+                    <hr>
+                                    <a class="muted" href="{% url 'privacy' %}">{% trans "Privacy" %}</a>
+                                    <span class="muted">|</span> 
+                                    <a class="muted" href="{% url 'impressum' %}">{% trans "Publishing Notes" %}</a>
+                                    <span class="muted">|</span> 
+                                    <a class="muted" href="{% url 'kontakt' %}">{% trans "Contact" %}</a>
+                                    <span class="muted">|</span>
+                                    <a class="muted" href="{% url 'info' %}">{% trans "Info" %}</a>
+                                    <span class="muted pull-right">&copy;2013 Copyright by Fraunhofer-Gesellschaft</span>
+                                    </div>
+                    </div>
+    </div>        
+</footer>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script language="javascript">
+	$('.carousel').carousel({
+	  interval: 8000
+	})
+	
+	$(function() {
+    $('#divOne').hover(function() { 
+        $('#divTwo').show(); 
+    }, function() { 
+        $('#divTwo').hide(); 
+    });
+	});
+	
+	
+	
+	$(document).ready(function(e) {
+        $('#div_table').click(function(){
+			if($('.navbar-toggle').is(':visible') && ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		 $('#content-tag').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		$('#search').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		$('#footer').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+	}
+
+		});
+    });
+
+	</script>
+    <script type="text/javascript" charset="utf-8">
+	$('#scroll-content-tag a').on('click', function (evt) {
+		evt.preventDefault();
+		var contentId = $(this).attr('href');
+		var content = $(document).find(contentId);
+		$('html, body').stop().animate({
+			scrollTop: $(content).offset().top-100
+		}, 2000);
+	});
+	</script>
+	<script type="text/javascript" charset="utf-8">
+    $('#scroll-content-search a').on('click', function (evt) {
+        evt.preventDefault();
+        var contentId = $(this).attr('href');
+        var content = $(document).find(contentId);
+        $('html, body').stop().animate({
+            scrollTop: $(content).offset().top
+        }, 2000);
+    });
+    </script>
+  </body>
+</html>

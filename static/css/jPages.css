@@ -1,0 +1,63 @@
+.holder {
+float: left;
+}
+
+.holder a {
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #FFFFFF;
+    border-color: #DDDDDD;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 0;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    text-decoration: none;
+	color: #428BCA;
+	
+}
+.holder a:hover {
+background-color: #F5F5F5;	
+}
+
+.holder a.jp-previous {    border-bottom-left-radius: 4px;
+    border-left-width: 1px;
+    border-top-left-radius: 4px;
+	}
+.holder a.jp-next { border-bottom-right-radius: 4px;
+    border-top-right-radius: 4px;
+	}
+
+.holder a.jp-current, a.jp-current:hover { 
+	color: #999999;
+    cursor: default;
+	font-weight: bold;
+}
+
+.holder a.jp-disabled, a.jp-disabled:hover {
+	color: #bbb;
+}
+
+.holder a.jp-current, a.jp-current:hover,
+.holder a.jp-disabled, a.jp-disabled:hover {
+	cursor: default; 
+	background: none;
+}
+
+.holder span { 	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #FFFFFF;
+    border-color: #DDDDDD;
+    border-image: none;
+    border-style: solid;
+    border-width: 1px 1px 1px 0;
+    line-height: 1.42857;
+    padding: 6px 12px;
+    text-decoration: none;
+	color: #428BCA;
+	
+	}

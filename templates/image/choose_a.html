@@ -1,0 +1,150 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+	<script>
+    $(document).ready(function()
+	{
+		
+		$(function(){
+            var sampleTags = [{% for tag in tags %}
+								'{{ tag.tag }}', 
+							{% endfor %}];
+            $('#singleFieldTags').tagit({
+            	placeholderText: '{% blocktrans %}E.g. jar or "red vase"{% endblocktrans %}',
+            	autocomplete: {minLength: 3},
+                availableTags: sampleTags,
+            });
+        });
+		
+		$('.tagSubmit').click(function(){
+		var form = $('#tagForm')
+		var url = form.attr("action");
+		$.ajax({
+		url: '{{ WEB_PREFIX }}/?button=' + $(this).attr("value"),
+		type: "POST",
+		data: form.serialize(),
+		success: function(data){
+		$('#replace_me').html(data);
+		}
+		});
+		return false;
+	});
+
+	});
+    </script>
+  <div class="modal fade" id="myModal-top-list">
+  	<div id="highscorelist">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+			<a href="#" class="close" data-dismiss="modal">&times;</a>
+        	<div><h3>{% trans "Top 10" %}</h3></div>
+        </div>
+        <div class="modal-body" id="modal" style="">
+          	<ol>
+			{% for highscore in highscores %}
+				<li>{{ highscore.name }}: {{ highscore.points }}</li>
+            {% endfor %}
+		</ol> 
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+<section id="content-tag" class="content">
+    <div class="container">
+    	<div class="row">
+        	<div class="col-lg-12" style="text-align:center">
+            	<h1>Tag. Check. Score.</h1>
+                <hr>
+            </div>
+        </div>
+        <article class="row" id="score-icon">
+       		 <div class="col-lg-1 score-list list-name"></div>
+             <div class="col-lg-2 score-list list-name" style="padding-top:5px;"><h3>{% trans "Top scorers:" %}</h3></div>
+             <div class="col-lg-2 score-list list-name"><img  class="icon-list" src="{{ STATIC_URL }}img/icon_1.png"><span style="padding-top:220px;"><h4 >{{ highscores.all.0.name }}: {{ highscores.all.0.points }}</h4></span></div>
+             <div class="col-lg-2 score-list list-name"><img  class="icon-list" src="{{ STATIC_URL }}img/icon_2.png"></span><h4>{{ highscores.all.1.name }}: {{ highscores.all.1.points }}</h4></div>
+             <div class="col-lg-2 score-list list-name"><img  class="icon-list" src="{{ STATIC_URL }}img/icon_3.png"></span><h4>{{ highscores.all.2.name }}: {{ highscores.all.2.points }}</h4></div>
+             <div class="col-lg-3 score-list "> <a role="button" data-toggle="modal" href="#myModal-top-list" class="btn btn-score btn-custom btn-block">{% trans "Show Top 10" %}</a></div>
+        </article>
+        <div class="row">
+        	<div class="col-lg-1"></div>
+             <div class="col-lg-8  score-list list-name" style="padding-top:15px;"><h3 style="letter-spacing:0.4em;">{% trans "Your Score:" %} {{ points }}</h3></div>
+             <div class="col-lg-3  score-list ">
+             	{% if points > highscores.all.9.points %}
+             	<a role="button"  data-toggle="modal" href="#myModal-save-score" class="btn btn-score btn-custom btn-block btn-padding">{% trans "Save points" %}</a>
+             	{% endif %}
+             	{% if points <= highscores.all.9.points %}
+				<a role="button"  data-toggle="modal" href="#myModal-not-score" class="btn btn-score btn-custom btn-block btn-padding">{% trans "Save points" %}</a>
+				{% endif %}
+             </div>
+        </div>
+        	<div class="row" style="margin-top:50px;">
+                       	<div class="col-lg-6 img " >
+                        	<div id="background-polaroid" style=" padding-top:40px; padding-bottom:30px;text-align:center; background-image:url({{ STATIC_URL }}img/hintegrund-bild1.png);background-size: 100%;background-repeat:no-repeat;"><!-- hier die sollen die bilder genriert werden----->
+                                <a href="{{ MEDIA_URL }}{{ image.image }}" rel="prettyPhoto" alt='<a href="{{ MEDIA_URL }}{{ image.image }}" download="{{ image.image }}">{% trans "Download this picture" %}</a>'><img src="{{ MEDIA_URL }}{{ image.image }}" class="ri"/></a>
+                      		 </div>
+                             <div class="row">
+                             <div class="col-lg-12 muted" style="text-align:center">
+                             	<a  onclick="$('#Attribution').show('slow')">{{ licence.all.0.title }}</a>
+                                <p id="Attribution">{{ licence.all.0.text }}</p>
+                             </div>
+                             </div>
+                   		</div>
+                        
+                   <div class=" col-lg-6">
+                    <div id="tag">
+                        <form action="" method="post" id="tagForm">{% csrf_token %}
+                                <label for="Tag" class="control-label ">{% trans "Add tags" %}</label>                                            
+                                   <ul id="singleFieldTags" name="tags"></ul>
+                            <div class="control-group">
+                                <label for="Category" class="control-label">{% trans "Select category" %}</label>
+                                <div class="controls">
+                                    <select name="category" id="Category">
+	                                        <option value="" selected="selected">{% trans "Make a choice" %}</option>
+										    {% for item in categories %}
+										    {% if item.language == LANGUAGE_CODE %}
+											    <option value="{{ item.category }}">{{ item.category }}</option>
+											{% endif %}
+										    {% endfor %}
+										    
+                                        </select>
+                                </div>
+                            </div>
+                             <div class="controls" >
+                             	<input type="text" id="freetext" name="freetext" class="form-control"  style="margin-top:15px;" placeholder="{% trans "Plenty of space for you to tell us all about this picture." %}">
+                             </div>	
+                             <div class="controls" style="text-align:center; margin-top:15px;">
+                             	<h5>{% trans "You know more about this picture? Click" %} </h5>
+                             	<input class="btn-add btn-custom" type="button" value="+" onclick="$('#freetext').show('slow')" />
+                                
+                            </div>
+                             <div class="controls" style="text-align:center; margin-top:15px;">
+                             	<button  class="btn btn-skip btn-custom tagSubmit" value="TagYes" name="TagYes">{% trans "Make it common!" %}</button>
+                                <button  class="btn btn-skip btn-custom tagSubmit" value="TagNo" name="TagNo">{% trans "Don't know" %}</button>
+                            </div>
+                            <div class="controls" style="text-align:center; margin-top:15px;">
+                             	<p><b>{% trans "Important note from the Ethnological Museum Berlin:" %}</b> {% trans "Some of  the historical recordings are certainly problematic from today's  perspective. However, they are part of the inventory and shall be  included. We therefore ask for a sensitive and respectful handling of  this material." %}</p>
+                            </div>
+                          </form>
+                    </div>
+        </div>
+    </div>
+</section>
+<script language="javascript">
+	$(document).ready(function() {
+		$('#freetext').hide();
+	});
+	$(document).ready(function() {
+		$('#Attribution').hide();
+	});
+</script>
+<script type="text/javascript" charset="utf-8">
+               $(document).ready(function(){
+                 $("a[rel^='prettyPhoto']").prettyPhoto(
+			    {
+			       deeplinking: false
+			    });
+               });
+    </script>

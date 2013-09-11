@@ -1,0 +1,66 @@
+
+
+/* Content */
+
+div#content h2 { font-size: 21px; margin-bottom: 30px; }
+div#content h3 { margin: 50px 0px 10px 0px; }
+div#content p { line-height:1.5; }
+div#content p a { color: white; background: #D4EE5E; font-weight: bold; }
+div#content p a:hover { background: black; }
+div#content p + div { margin-top: 50px; }
+div#content h3 span { background-color: #F4FAD2; color: #5C826D; padding: 2px 3px; margin-left: 10px; font-weight: normal; }
+
+/* Content -> Code */
+
+div#content div.codeBlocks { margin: 20px 0 35px; }
+
+div#content pre { float: left; margin-right: 10px; cursor: pointer; }
+div#content pre:before { content: attr(class); padding: 2px 3px; color: white; }
+
+div#content pre.html { background: #F0F2EB; border-bottom: 1px solid #D7D9D3; }
+div#content pre.html:before { background: #D7D9D3; }
+
+div#content pre.javascript { background: #F4FAD2; border-bottom: 1px solid #DBE0BC; }
+div#content pre.javascript:before { background: #DBE0BC; }
+
+div#content pre.css { background: #E1EDB9; border-bottom: 1px solid #CAD5A6; }
+div#content pre.css:before { background: #CAD5A6; }
+
+div#content pre.collapse { position: relative; padding:2% 3%; width:94%; }
+div#content pre.collapse:before { position: absolute; right: 0; top: 0; }
+
+div#content pre code { display: none; background: none; font: 11px/16px "Courier New", Courier, monospace; }
+div#content pre.collapse code { display:block; }
+
+/* Content -> Unordered Lists */
+
+div#content ul#itemContainer { list-style: none; padding:0; margin: 20px 0;  }
+div#content ul#itemContainer li { display: inline-block; margin: 5px; zoom: 1; *display:inline; }
+div#content ul#itemContainer ll li img { vertical-align: bottom; width: 125px; height: 125px; }
+
+/* Content -> index */
+
+div#content.index pre { float:none; cursor:default; }
+div#content.index pre code { display:block; }
+div#content.index h2 { margin-top: 55px; }
+div#content.index dl dt,
+div#content.index dl dd { float: left; margin-top: 10px; }
+div#content.index dl dt { clear: left; width: 70px; font-style: italic; }
+div#content.index dl dd { width: 450px; }
+div#content.index i + p { margin-top: 5px; }
+
+/* Content -> documentation */
+
+div#content.documentation h2 { margin-top: 55px; }
+div#content.documentation dl dt,
+div#content.documentation dl dd { float: left; margin-top: 10px; }
+div#content.documentation dl dt { clear: left; width: 70px; font-style: italic; }
+div#content.documentation dl dd { width: 450px; }
+div#content.documentation i + p { margin-top: 5px; }
+
+/* Content -> author */
+
+div#content.author img { margin-bottom: 50px; }
+div#content.author img + p:before { content: '“'; font-size:65px; font-family: Georgia; position:absolute; top: -55px; color: #ccc; }
+div#content.author p { width: 590px; position: relative; }
+

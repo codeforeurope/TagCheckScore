@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	{% load i18n %}
+  	{% load staticfiles %}
+    <title>Tag.Check.Score.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/main.css" rel="stylesheet" media="screen">
+    <link href="{{ STATIC_URL }}css/bootstrap-glyphicons.css" rel="stylesheet" media="screen">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.ico">
+     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.js" rel="stylesheet" type="text/css"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script>
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/prettyPhoto.css" type="text/css" media="screen" title="prettyPhoto main stylesheet" charset="utf-8" />
+		<script src="{{ STATIC_URL }}js/jquery.prettyPhoto.js" type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript"> <!--
+    function UnCryptMailto( s )
+    {
+        var n = 0;
+        var r = "";
+        for( var i = 0; i < s.length; i++)
+        {
+            n = s.charCodeAt( i );
+            if( n >= 8364 )
+            {
+                n = 128;
+            }
+            r += String.fromCharCode( n - 1 );
+        }
+        return r;
+    }
+
+    function linkTo_UnCryptMailto( s )
+    {
+        location.href=UnCryptMailto( s );
+    }
+    // --> </script>
+    <script type="text/javascript">
+    function setLang(lang){
+        $('#langForm select').val(lang); 
+        $('#langForm').submit();
+        return false;
+    }
+</script>
+  </head>
+  <body>
+    <nav class="navbar-wrapper">
+      <div class="container navbar-fixed" style="background-color: white">
+          <div class="navbar navbar-fixed-top navbar-inverse">
+          <div class="container">
+          <div>
+            <a class="navbar-brand" href="/"><img src="{{ STATIC_URL }}img/logo_beta.png" class="img-responsive" alt="Logo"></a>
+          </div>  
+            <a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <div class="nav-collapse collapse" id="menu">
+              <ul class="nav navbar-nav pull-right">
+                <li><a href="{{ WEB_PREFIX }}/">{% trans "Home" %}</a></li>
+                <li><a href="{{ WEB_PREFIX }}/#content-tag">{% trans "Tag a picture" %}</a></li>
+                <li><a href="{{ WEB_PREFIX }}/#search">{% trans "Search" %}</a></li>
+<a class="flag" onclick="setLang('de');"><img src="{{ STATIC_URL }}img/de_DE.png" width="16" height="11"></a>
+<a class="flag" onclick="setLang('en');"><img src="{{ STATIC_URL }}img/en_UK.png" width="16" height="11"></a>
+<form id="langForm" action="{{ WEB_PREFIX }}/i18n/setlang/" method="post" style="display:none;">
+	{% csrf_token %}
+    <select name="language">
+        <option value="de">Deutsch</option>
+        <option value="en">English</option>
+    </select>
+</form>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <header id="div_table" class="content"> 
+    	<div id="div_tablecell"> 
+        	<div id="mainbox" >
+            	<div class="container">
+                	<div class="row">
+                     <div class="col-lg-12 " style="margin-bottom:30px;"><h2>{% trans "Contact" %}</h2></div>
+                     <div class="col-lg-12 link">
+                        <legend>{% trans "Contact for questions about the pictures:" %}</legend>    
+
+                     </div>
+                     <div class="col-lg-12 link" style="margin-top:20px;">
+                    	<legend>{% trans "Contact for questions about the application:" %}</legend>
+
+                     </div>
+                     <div class="col-lg-6" style="text-align:center"></div>
+                    </div>
+            	</div>
+<footer id="footer">
+    <div class="container">
+            <div class="row">
+            	 <hr>
+            	 <div class="col-3 col-sm-3 col-lg-3" style="text-align:center"><img src="{{ STATIC_URL }}img/fraunhofer_logo.png" alt="fraunhofer" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-2 col-lg-2" style="text-align:center"><img src="{{ STATIC_URL }}img/cip_Logo.png" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-3 col-lg-2" style="text-align:center"><img src="{{ STATIC_URL }}img/commons4u_logo.png" alt="commons4u" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-2 col-sm-2 col-lg-2" style="text-align:center; margin-bottom:20px;"><img src="{{ STATIC_URL }}img/code4eu_logo.png" alt="code4eu" style="cursor: default" class="img-responsive"></div>
+                 <div class="col-3 col-sm-2 col-lg-3" style="text-align:center"><img src="{{ STATIC_URL }}img/eu_logo.png" alt="eu_logo" style="cursor: default" class="img-responsive"> </div>
+                 <div class="col-12 col-sm-12 col-lg-12 muted">
+                    <hr>
+                                    <a class="muted" href="{% url 'privacy' %}">{% trans "Privacy" %}</a>
+                                    <span class="muted">|</span> 
+                                    <a class="muted" href="{% url 'impressum' %}">{% trans "Publishing Notes" %}</a>
+                                    <span class="muted">|</span> 
+                                    <a class="muted" href="{% url 'kontakt' %}">{% trans "Contact" %}</a>
+                                    <span class="muted">|</span>
+                                    <a class="muted" href="{% url 'info' %}">{% trans "Info" %}</a>
+                                    <span class="muted pull-right">&copy;2013 Copyright by Fraunhofer-Gesellschaft</span>
+                                    </div>
+                    </div>
+    </div>        
+</footer>
+        	</div>
+    </div>
+    </header>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+    <script language="javascript">
+	$('.carousel').carousel()
+	
+	$(function() {
+    $('#divOne').hover(function() { 
+        $('#divTwo').show(); 
+    }, function() { 
+        $('#divTwo').hide(); 
+    });
+	});
+	
+	
+		
+	$(document).ready(function(e) {
+        $('#div_table').click(function(){
+			if($('.navbar-toggle').is(':visible') && ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		 $('#content-tag').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		$('#search').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+			}
+		});
+		$('#footer').click(function(){
+			if($('.navbar-toggle').is(':visible')&& ($('#menu').is(':visible'))){
+			$('#menu').collapse('hide');
+	}
+
+		});
+    });
+	$(document).ready(function() {
+		$('#add-text').hide();
+	});
+	$(document).ready(function() {
+		$('#Attribution').hide();
+	});
+	</script>
+    <script type="text/javascript" charset="utf-8">
+               $(document).ready(function(){
+                 $("a[rel^='prettyPhoto']").prettyPhoto();
+               });
+    </script>
+    <script type="text/javascript" charset="utf-8">
+	$('#scroll-content-tag a').on('click', function (evt) {
+		evt.preventDefault();
+		var contentId = $(this).attr('href');
+		var content = $(document).find(contentId);
+		$('html, body').stop().animate({
+			scrollTop: $(content).offset().top-100
+		}, 2000);
+	});
+	</script>
+	<script type="text/javascript" charset="utf-8">
+    $('#scroll-content-search a').on('click', function (evt) {
+        evt.preventDefault();
+        var contentId = $(this).attr('href');
+        var content = $(document).find(contentId);
+        $('html, body').stop().animate({
+            scrollTop: $(content).offset().top
+        }, 2000);
+    });
+    </script>
+  </body>
+</html>
