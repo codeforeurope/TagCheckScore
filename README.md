@@ -6,7 +6,7 @@ A running Version of this Project you can find at http://cityapps.fokus.fraunhof
 
 Install
 -------
-To install this Project you need to install the following Packages:
+To setup this project you need to install the following packages:
 ```
 apt-get install python-imaging
 ```
