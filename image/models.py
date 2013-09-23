@@ -23,7 +23,7 @@ from django.conf import settings
 
         
 class Category(models.Model):
-    category = models.TextField(u'Category', primary_key=True)
+    category = models.TextField(u'Category', primary_key=False)
     language = models.CharField(max_length=5, blank=False)
     def __unicode__(self):
         return self.category
@@ -32,7 +32,7 @@ class Category(models.Model):
         verbose_name_plural = "Categories"
     
 class Tag(models.Model):
-    tag = models.TextField(u'Tag', primary_key=True)
+    tag = models.TextField(u'Tag', primary_key=False)
     language = models.CharField(max_length=5, blank=False)
     def __unicode__(self):
         return self.tag

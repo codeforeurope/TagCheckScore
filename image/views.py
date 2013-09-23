@@ -113,18 +113,18 @@ def index(request):
         if chosenCategory != '':
             userTag = True
             #If the Category for this Image exists already
-            if Category_image.objects.filter(category__language=request.LANGUAGE_CODE).filter(image=request.session['image']).filter(category=chosenCategory).exists():
+            if Category_image.objects.filter(image=request.session['image']).filter(category=Category.objects.filter(language=request.LANGUAGE_CODE).filter(category=chosenCategory)[0].id).exists():
                 #take the current count and increment by 1
-                countC = Category_image.objects.filter(category__language=request.LANGUAGE_CODE).filter(image=request.session['image']).filter(category=chosenCategory).values_list('cCount')[0][0] + 1
+                countC = Category_image.objects.filter(image=request.session['image']).filter(category=Category.objects.filter(language=request.LANGUAGE_CODE).filter(category=chosenCategory)[0].id).values_list('cCount')[0][0] + 1
                 #the current category that should be incremented
-                modC = Category_image.objects.filter(category__language=request.LANGUAGE_CODE).filter(image=request.session['image']).filter(category=chosenCategory)[0]
+                modC = Category_image.objects.filter(image=request.session['image']).filter(category=Category.objects.filter(language=request.LANGUAGE_CODE).filter(category=chosenCategory)[0].id)[0]
                 #save the new count
                 modC.cCount = countC
                 modC.save()
             #if the Category does not exist yet
             else:
                 #save the new category with the counter starting by 1
-                categoryImage = Category_image(image=request.session['image'], category=Category.objects.get(category=chosenCategory), cCount=1)
+                categoryImage = Category_image(image=request.session['image'], category=Category.objects.get(category=chosenCategory, language=request.LANGUAGE_CODE), cCount=1)
                 categoryImage.save()
                 
                 
@@ -141,18 +141,20 @@ def index(request):
                     
             #if the word is not on the blacklist        
             if blacklist == False:
-                if Tag.objects.filter(tag=singleTag).exists():
+                #if Tag.objects.filter(tag=singleTag).filter(language=request.LANGUAGE_CODE).exists():
+                if Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag).exists():
                     #If the Tag exists for this image
-                    if Tag_image.objects.filter(image=request.session['image']).filter(tag=singleTag).exists():
+                    if Tag_image.objects.filter(image=request.session['image']).filter(tag=Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag)[0].id).exists():
                             
-                        newCount = Tag_image.objects.filter(image=request.session['image']).filter(tag=singleTag).values_list('tCount')[0][0] + 1
+                        newCount = Tag_image.objects.filter(image=request.session['image']).filter(tag=Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag)[0].id).values_list('tCount')[0][0] + 1
                             
                             #hier db entry modifizieren
-                        newEntry = Tag_image.objects.filter(image=request.session['image']).filter(tag=singleTag)[0]
+                        newEntry = Tag_image.objects.filter(image=request.session['image']).filter(tag=Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag)[0].id)[0]
                         newEntry.tCount = newCount
                         newEntry.save()
                     else:
-                        tagImage = Tag_image(image=request.session['image'], tag=Tag.objects.get(tag=singleTag), tCount=1)
+                        print(Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag)[0].id)
+                        tagImage = Tag_image(image=request.session['image'], tag=Tag.objects.get(tag=Tag.objects.filter(language=request.LANGUAGE_CODE).filter(tag=singleTag)[0].tag, language=request.LANGUAGE_CODE), tCount=1)
                         tagImage.save()
                 #if the tag does not exist yet            
                 else:
@@ -220,7 +222,11 @@ def index(request):
                             request.session['image'] = Image.objects.order_by('?')[0]
                     page = 'image/decide.html'
     request.session['points'] = pointCount
-    return render_to_response(page,context_instance=RequestContext(request, {'highscores': highscores, 'image': request.session['image'], 'categories': Category.objects.all(), 'question': request.session.get('question'), 'points': pointCount, 'images': images, 'tags': Tag.objects.all(), 'noimage': noImage, 'licence': licence, 'search': search, 'WEB_PREFIX': settings.WEB_PREFIX}))
+    if Tag.objects.filter(id=request.session.get('question')).exists():
+        question = Tag.objects.get(id=request.session.get('question'))
+    else:
+        question = ''
+    return render_to_response(page,context_instance=RequestContext(request, {'highscores': highscores, 'image': request.session['image'], 'categories': Category.objects.all(), 'question': question, 'points': pointCount, 'images': images, 'tags': Tag.objects.all(), 'noimage': noImage, 'licence': licence, 'search': search, 'WEB_PREFIX': settings.WEB_PREFIX}))
 
 def kontakt(request):
     return render_to_response('image/kontakt.html',context_instance=RequestContext(request, {'WEB_PREFIX': settings.WEB_PREFIX}))
