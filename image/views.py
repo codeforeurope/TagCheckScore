@@ -61,7 +61,7 @@ def index(request):
     #if the search button was pressed
     elif (request.method == 'POST') and ('Search' == request.GET.get('button')):
         search = request.POST.get('search').lower()
-        images = Tag_image.objects.filter(tag=search)
+        images = Tag_image.objects.filter(tag__tag=search)
         if images.exists() == False:
             noImage = True
     
